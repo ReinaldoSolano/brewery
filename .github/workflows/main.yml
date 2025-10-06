@@ -9,7 +9,15 @@ jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Obter código"
+      - name: Obtendo código do projeto
+        uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+          
       - run: echo "Executar o Docker Build"
       - run: echo "Enviar a Imagem Docker para o Docker Hub"
 
