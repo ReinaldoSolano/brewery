@@ -1,0 +1,30 @@
+name: Pipeline CI/ CD
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtendo código do projeto
+        uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+          
+      - run: echo "Executar o Docker Build"
+      - run: echo "Enviar a Imagem Docker para o Docker Hub"
+
+  CD:
+    runs-on: ubuntu-latest
+    needs: [CI]
+    steps:
+      - run: echo "Obter código"
+      - run: echo "Configurar o Kubeconfig"
+      - run: echo "Fazer Deploy no K8S"
