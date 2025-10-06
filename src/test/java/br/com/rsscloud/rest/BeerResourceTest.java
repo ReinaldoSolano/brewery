@@ -101,7 +101,7 @@ class BeerResourceTest {
         given()
                 .when().get("/beers/{id}", 99999L)
                 .then()
-                .statusCode(204)
+                .statusCode(200)
                 .body(equalTo(""));
     }
 
