@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
 
-      - name: Maven Test
+      - name: Maven Test Package
         run: mvn clean test package
           
       - name: Login Docker Hub
@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: src/main/docker/Dockerfile.jvm
+          file: src/main/docker/Dockerfile.native
           push: true
           tags: |
             rssystem/brewery:latest
