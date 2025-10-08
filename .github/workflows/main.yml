@@ -64,4 +64,6 @@ jobs:
         uses: azure/k8s-deploy@v5
         with:
           manifests: |
+            k8s/configmap.yml
+            k8s/secret.yml
             k8s/deployment.yml
