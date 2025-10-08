@@ -55,25 +55,15 @@ spec:
         app.kubernetes.io/version: 1.0.0
     spec:
       containers:
-        - image: rssystem/brewery:13
+        - image: rssystem/brewery:14
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "55m"
-            limits:
               memory: "128Mi"
-              cpu: "75m"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
           imagePullPolicy: Always
-          livenessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /q/health/live
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 10
           name: brewery
           ports:
             - containerPort: 8080
@@ -95,6 +85,16 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
           readinessProbe:
             failureThreshold: 3
             httpGet:
