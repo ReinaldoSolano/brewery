@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: quarkus-config
 data:
-  QUARKUS_DATASOURCE_JDBC_URL: postgresql://doadmin:AVNS_lZrGyKetsgnmVCLIBBF@private-meu-db-postgres-do-user-7247500-0.m.db.ondigitalocean.com:25060/defaultdb?sslmode=require
+  QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://private-meu-db-postgres-do-user-7247500-0.m.db.ondigitalocean.com:25060/defaultdb?sslmode=require
 
