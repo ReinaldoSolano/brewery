@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quarkus-config
+data:
+  QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://meu-db-postgres-do-user-7247500-0.m.db.ondigitalocean.com:5432/defaultdb
+
