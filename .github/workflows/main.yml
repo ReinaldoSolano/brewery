@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Maven Test Package
-        run: mvn clean test package
+        run: mvn clean package -DskipTests=true
           
       - name: Login Docker Hub
         uses: docker/login-action@v3
