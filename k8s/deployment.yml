@@ -71,7 +71,10 @@ spec:
               protocol: TCP
           env:
             - name: QUARKUS_DATASOURCE_JDBC_URL
-              value: ${{ secrets.DB_URL }}
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: db-jdbc
             - name: QUARKUS_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
