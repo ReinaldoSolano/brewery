@@ -58,7 +58,7 @@ jobs:
           secret-type: 'generic'
           secret-name: 'database-secret'
           data: |
-            QUARKUS_DATASOURCE_JDBC_URL=${{ secrets.DATABASE_URL }}
+            { QUARKUS_DATASOURCE_JDBC_URL: ${{ secrets.DATABASE_URL }} }
 
       - name: Deploy
         uses: azure/k8s-deploy@v5
