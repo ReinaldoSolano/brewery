@@ -53,12 +53,10 @@ jobs:
 
 
       - name: Criar secret do banco
-        uses: azure/k8s-create-secret@v4
-        with:
-          secret-type: 'generic'
-          secret-name: 'database-secret'
-          data: |
-            { QUARKUS_DATASOURCE_JDBC_URL: ${{ secrets.DATABASE_URL }} }
+        run: |
+          kubectl create secret generic database-secret \
+            --from-literal=QUARKUS_DATASOURCE_JDBC_URL="${{ secrets.DATABASE_URL }}" \
+            --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy
         uses: azure/k8s-deploy@v5
