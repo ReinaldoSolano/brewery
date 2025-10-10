@@ -1,6 +1,8 @@
 package br.com.rsscloud.rest;
 
 import br.com.rsscloud.model.Beer;
+import br.com.rsscloud.repository.BeerRepository;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -12,6 +14,8 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class BeerResource {
+    @Inject
+    BeerRepository beerRepository;
     @GET
     public List<Beer> listAll(){
         return Beer.listAll();
@@ -58,5 +62,10 @@ public class BeerResource {
            return Response.status(Response.Status.NO_CONTENT).build();
        }
         return Response.status(Response.Status.NOT_FOUND).build();
+    }
+    @GET
+    @Path("/type/{type}")
+    public List<Beer> getByType(@PathParam("type") String type){
+        return beerRepository.findByType(type);
     }
 }

@@ -21,7 +21,7 @@ spec:
   selector:
     app.kubernetes.io/name: brewery
     app.kubernetes.io/version: 1.0.0
-  type: ClusterIP
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
