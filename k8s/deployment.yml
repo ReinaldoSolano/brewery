@@ -55,7 +55,7 @@ spec:
         app.kubernetes.io/version: 1.0.0
     spec:
       containers:
-        - image: rssystem/brewery:14
+        - image: rssystem/brewery
           resources:
             requests:
               memory: "128Mi"
