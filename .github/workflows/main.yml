@@ -56,7 +56,7 @@ jobs:
         run: kubectl config current-context
 
       - name: Update image tag
-        run: sed -i 's|image: rssystem/brewery:latest|image: rssystem/brewery:v${{ github.run_number }}|' k8s/deployment.yml
+        run: sed -i 's|rssystem/brewery:latest|rssystem/brewery:v${{ github.run_number }}|' k8s/deployment.yml
 
       - name: Check if secret exists
         run: |
