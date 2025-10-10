@@ -46,10 +46,13 @@ jobs:
 
       - name: Buscar e alterar a tag
         uses: jacobtomlinson/gha-find-replace@v3
-        with: |
+        with:
           find: "rssystem/brewery:latest"
           replace: "rssystem/brewery:v${{ github.run_number }}"
           include: "k8s/deployment.yml"
+
+      - name: Push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
 
       - name: Aplicar K8S Secret (DB)
         run: |
