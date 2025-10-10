@@ -37,11 +37,7 @@ jobs:
             rssystem/brewery:latest
             rssystem/brewery:v${{ github.run_number }}
 
-      - name: Chamar o CD
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: Pipeline CI/ CD
-          token: ${{ secrets.ACTIONS_TOKEN }}
+
           
   CD:
     runs-on: ubuntu-latest

@@ -84,5 +84,3 @@ Monitor your application's health using SmallRye Health
 
 [Related guide section...](https://quarkus.io/guides/smallrye-health)
 
-### GOOGLE-KEY
-brewery: AIzaSyCauAH6KkYDOFtruPwQFhR2RtLJchVTqo8
