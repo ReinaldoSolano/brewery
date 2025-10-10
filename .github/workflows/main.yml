@@ -56,11 +56,7 @@ jobs:
         run: kubectl config current-context
 
       - name: Update image tag
-        uses: datamonsters/replace-in-file@v1
-        with:
-          file: k8s/deployment.yml
-          find: '        - image: rssystem/brewery:latest'
-          replace: '        - image: rssystem/brewery:v${{ github.run_number }}'
+        run: sed -i 's|image: rssystem/brewery:latest|image: rssystem/brewery:v${{ github.run_number }}|' k8s/deployment.yml
 
       - name: Check if secret exists
         run: |
