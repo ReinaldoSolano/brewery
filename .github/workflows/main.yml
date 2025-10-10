@@ -37,11 +37,12 @@ jobs:
             rssystem/brewery:latest
             rssystem/brewery:v${{ github.run_number }}
 
-      - name: Atualizar manifest com tag de imagem
-        run: |
-          sed -i "s|rssystem/brewery:latest|rssystem/brewery:v${{ github.run_number }}|g" k8s/deployment.yml
-            
-
+      - name: Chamar o CD
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Pipeline CI/ CD
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          
   CD:
     runs-on: ubuntu-latest
     needs: [CI]
@@ -49,23 +50,34 @@ jobs:
       - name: Obtendo o código do projeto
         uses: actions/checkout@v5
 
+      - name: Find and replace tag
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "rssystem/brewery:latest"
+          replace: "rssystem/brewery:v${{ github.run_number }}"
+          include: "k8s/deployment.yml"
+
       - name: Configurar o contexto do K8S
         uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
-
-      - name: Aplicar K8S Secret (DB)
-        run: |
-          kubectl create secret generic postgres-credentials \
-            --from-literal=db-username=${{ secrets.DB_USERNAME }} \
-            --from-literal=db-password=${{ secrets.DB_PASSWORD }} \
-            --from-literal=db-jdbc=${{ secrets.DB_URL }} \
-            --dry-run=client -o yaml | kubectl apply -f -
-
-      - name: Deploy
-        uses: azure/k8s-deploy@v5
+      - name: Create secret
+        uses: k8s-actions/create-secret@v1
         with:
+          name: postgres-credentials
+          namespace: default
+          data: |
+            db-username: ${{ secrets.DB_USERNAME }}
+            db-password: ${{ secrets.DB_PASSWORD }}
+            db-jdbc: ${{ secrets.DB_URL }}
+            
+      - name: Deploy to Kubernetes
+        uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
           manifests: |
             k8s/deployment.yml
+          images: |
+            rssystem/brewery:v${{ github.run_number }}
