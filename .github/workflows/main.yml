@@ -36,6 +36,10 @@ jobs:
           tags: |
             rssystem/brewery:latest
             rssystem/brewery:v${{ github.run_number }}
+
+      - name: Atualizar manifest com tag de imagem
+        run: |
+          sed -i "s|rssystem/brewery:latest|rssystem/brewery:v${GITHUB_RUN_NUMBER}|g" k8s/deployment.yml
             
 
   CD:
