@@ -52,28 +52,3 @@ jobs:
           find: "rssystem/brewery:latest"
           replace: "rssystem/brewery:v${{ github.run_number }}"
           include: "k8s/deployment.yml"
-
-      - name: Configurar o contexto do K8S
-        uses: azure/k8s-set-context@v4
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
-
-      - name: Create secret
-        uses: k8s-actions/create-secret@v1
-        with:
-          name: postgres-credentials
-          namespace: default
-          data: |
-            db-username: ${{ secrets.DB_USERNAME }}
-            db-password: ${{ secrets.DB_PASSWORD }}
-            db-jdbc: ${{ secrets.DB_URL }}
-            
-      - name: Deploy to Kubernetes
-        uses: Azure/k8s-deploy@v4
-        with:
-          action: deploy
-          manifests: |
-            k8s/deployment.yml
-          images: |
-            rssystem/brewery:v${{ github.run_number }}
