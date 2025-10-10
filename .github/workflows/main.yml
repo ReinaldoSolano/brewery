@@ -44,29 +44,30 @@ jobs:
       - name: Obtendo o código do projeto
         uses: actions/checkout@v5
 
-      - name: Buscar e alterar a tag
-        uses: jacobtomlinson/gha-find-replace@v3
-        with:
-          find: "rssystem/brewery:latest"
-          replace: "rssystem/brewery:v${{ github.run_number }}"
-          include: "k8s/deployment.yml"
-
-      - name: Push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-
-      - name: Aplicar K8S Secret (DB)
+      - name: Set up Kubeconfig
         run: |
-          kubectl create secret generic postgres-credentials \
-            --from-literal=db-username=${{ secrets.DB_USERNAME }} \
-            --from-literal=db-password=${{ secrets.DB_PASSWORD }} \
-            --from-literal=db-jdbc=${{ secrets.DB_URL }} \
-            --dry-run=client -o yaml | kubectl apply -f -
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Verify kubectl configuration
+        run: kubectl config current-context
+
+      - name: Update image tag
+        uses: datamonsters/replace-in-file@v1
+        with:
+          file: k8s/deployment.yml
+          find: '        - image: rssystem/brewery:latest'
+          replace: '        - image: rssystem/brewery:v${{ github.run_number }}'
+
+      - name: Check if secret exists
+        run: |
+          if ! kubectl get secret postgres-credentials; then
+            echo "Secret postgres-credentials does not exist. Please create it before deploying the application."
+            exit 1
+          fi
 
       - name: Deploy to Kubernetes
-        uses: Azure/k8s-deploy@v4
-        with:
-          action: deploy
-          manifests: |
-            k8s/deployment.yml
-          images: |
-            rssystem/brewery:v${{ github.run_number }}
+        run: kubectl apply -f k8s/deployment.yml
