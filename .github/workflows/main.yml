@@ -32,6 +32,9 @@ jobs:
             -Dsonar.java.binaries=target/classes
             -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco-report/jacoco.xml
             -Dsonar.qualitygate.wait=true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
           
       - name: Log Docker
         uses: docker/login-action@v3
