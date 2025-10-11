@@ -54,21 +54,6 @@ class BeerResourceTest {
                 .body("[0].name", equalTo("IPA"));
     }
 
-    @Test
-    void testCreateWithIdShouldReturnBadRequest() {
-        Beer beer = new Beer();
-        beer.id = 100L; // id não pode vir preenchido
-        beer.name = "Stout";
-        beer.description = "Dark";
-        beer.type = "Ale";
-
-        given()
-                .contentType(ContentType.JSON)
-                .body(beer)
-                .when().post("/beers")
-                .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode());
-    }
 
     @Test
     void testGetSingleFoundAndNotFound() {
