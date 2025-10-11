@@ -37,7 +37,7 @@ public class BeerService {
     public void validName(String name) {
         boolean existsName = beerRepository.findByName(name).stream().findFirst().isPresent();
         if(existsName)
-        throw new WebApplicationException("name must be unique to create beer", Response.Status.BAD_REQUEST);
+            throw new WebApplicationException("name must be unique to create beer", Response.Status.BAD_REQUEST);
     }
 
     private String  generateSKU() {
