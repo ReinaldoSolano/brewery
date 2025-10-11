@@ -18,6 +18,9 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
 
+      - name: Teste e Empacotamento
+        run: mvn clean
+
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         with:
@@ -31,9 +34,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
-
-      - name: Teste e Empacotamento
-        run: mvn clean package -Pnative
           
 
           
@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: src/main/docker/Dockerfile.native
+          file: src/main/docker/Dockerfile.jvm
           push: true
           tags: |
             rssystem/brewery:latest
