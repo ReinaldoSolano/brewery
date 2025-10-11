@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.transaction.Transactional;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -16,6 +17,9 @@ public class BeerService {
     @Inject
     BeerRepository beerRepository;
 
+
+
+    @Transactional
     public void create(BeerRequest request) {
 
         validName(request.name);
