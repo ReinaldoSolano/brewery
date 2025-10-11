@@ -37,15 +37,15 @@ jobs:
             rssystem/brewery:latest
             rssystem/brewery:v${{ github.run_number }}
 
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v3
-
-      - name: Sign the container image
-        run: |
-          cosign sign --yes --key env://COSIGN_PRIVATE_KEY rssystem/brewery:v${{ github.run_number }}
-        env:
-          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+#      - name: Install Cosign
+#        uses: sigstore/cosign-installer@v3
+#
+#      - name: Sign the container image
+#        run: |
+#          cosign sign --yes --key env://COSIGN_PRIVATE_KEY rssystem/brewery:v${{ github.run_number }}
+#        env:
+#          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+#          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
 
   CD:
     runs-on: ubuntu-latest
