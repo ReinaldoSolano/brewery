@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Teste e Empacotamento
-        run: mvn clean
+        run: mvn clean package
 
       - name: SonarQube
         uses: sonarsource/sonarqube-scan-action@master
