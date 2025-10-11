@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Continuos Integration:
+  Continuos_Integration:
     runs-on: ubuntu-latest
     steps:
       - name: Obtendo código do projeto
@@ -47,7 +47,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
 
-  Continuos Deployment:
+  Continuos_Deployment:
     runs-on: ubuntu-latest
     needs: [CI]
     steps:
