@@ -42,7 +42,7 @@ public class BeerResource {
     @PUT
     @Path("/{id}")
     @Transactional
-    public Beer create(@PathParam("id") Long id, Beer beer){
+    public Beer update(@PathParam("id") Long id, Beer beer){
 
         Beer entity = Beer.findById(id);
         if(entity == null){
@@ -68,6 +68,6 @@ public class BeerResource {
     @GET
     @Path("/type/{type}")
     public List<Beer> getByType(@PathParam("type") String type){
-        return beerRepository.findByType(type);
+        return beerService.findByType(type);
     }
 }

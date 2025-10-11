@@ -9,6 +9,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -57,4 +58,7 @@ public class BeerService {
     }
 
 
+    public List<Beer> findByType(String type) {
+        return beerRepository.findByType(type);
+    }
 }
