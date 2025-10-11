@@ -1,9 +1,9 @@
 package br.com.rsscloud.rest;
 
 import br.com.rsscloud.model.Beer;
+import br.com.rsscloud.rest.dto.BeerRequest;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-import io.restassured.response.ValidatableResponse;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,14 +34,13 @@ class BeerResourceTest {
 
     @Test
     void testCreateAndListAll() {
-        Beer beer = new Beer();
-        beer.name = "IPA";
-        beer.description = "Strong";
-        beer.type = "Ale";
+        BeerRequest request = new BeerRequest();
+        request.name = "IPA";
+        request.type = "Ale";
 
-        ValidatableResponse response = given()
+        given()
                 .contentType(ContentType.JSON)
-                .body(beer)
+                .body(request)
                 .when().post("/beers")
                 .then()
                 .statusCode(Response.Status.CREATED.getStatusCode());
@@ -51,21 +50,21 @@ class BeerResourceTest {
                 .then()
                 .statusCode(200)
                 .body("", hasSize(1))
-                .body("[0].name", equalTo("IPA"));
+                .body("[0].name", equalTo("IPA"))
+                .body("[0].description", equalTo("Lipi's IPA beer")); // Assert auto-generated description
     }
 
 
     @Test
     void testGetSingleFoundAndNotFound() {
-        Beer beer = new Beer();
-        beer.name = "Lager";
-        beer.description = "Smooth";
-        beer.type = "Lager";
+        BeerRequest request = new BeerRequest();
+        request.name = "Lager";
+        request.type = "Lager";
 
         // Cria a cerveja
         given()
                 .contentType(ContentType.JSON)
-                .body(beer)
+                .body(request)
                 .when().post("/beers")
                 .then().statusCode(Response.Status.CREATED.getStatusCode());
 
@@ -92,15 +91,14 @@ class BeerResourceTest {
 
     @Test
     void testUpdateFoundAndNotFound() {
-        Beer beer = new Beer();
-        beer.name = "Witbier";
-        beer.description = "Citrus";
-        beer.type = "Wheat";
+        BeerRequest request = new BeerRequest();
+        request.name = "Witbier";
+        request.type = "Wheat";
 
         // Cria cerveja
         given()
                 .contentType(ContentType.JSON)
-                .body(beer)
+                .body(request)
                 .when().post("/beers")
                 .then().statusCode(Response.Status.CREATED.getStatusCode());
 
@@ -136,13 +134,12 @@ class BeerResourceTest {
 
     @Test
     void testDeleteFoundAndNotFound() {
-        Beer beer = new Beer();
-        beer.name = "Pilsen";
-        beer.description = "Classic";
-        beer.type = "Lager";
+        BeerRequest request = new BeerRequest();
+        request.name = "Pilsen";
+        request.type = "Lager";
         given()
                 .contentType(ContentType.JSON)
-                .body(beer)
+                .body(request)
                 .when().post("/beers")
                 .then().statusCode(Response.Status.CREATED.getStatusCode());
 
@@ -161,5 +158,46 @@ class BeerResourceTest {
                 .when().delete("/beers/{id}", 999999L)
                 .then()
                 .statusCode(Response.Status.NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    void testGetByType() {
+        BeerRequest request = new BeerRequest();
+        request.name = "Amber Ale";
+        request.type = "Amber";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/beers")
+                .then().statusCode(Response.Status.CREATED.getStatusCode());
+
+        given()
+                .when().get("/beers/type/Amber")
+                .then()
+                .statusCode(200)
+                .body("", hasSize(1))
+                .body("[0].name", equalTo("Amber Ale"))
+                .body("[0].type", equalTo("Amber"));
+    }
+
+    @Test
+    void testCreateWithDuplicateName() {
+        BeerRequest request = new BeerRequest();
+        request.name = "Duplicate Beer";
+        request.type = "Lager";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/beers")
+                .then().statusCode(Response.Status.CREATED.getStatusCode());
+
+        // Try to create again with the same name
+        given()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/beers")
+                .then().statusCode(Response.Status.BAD_REQUEST.getStatusCode());
     }
 }
