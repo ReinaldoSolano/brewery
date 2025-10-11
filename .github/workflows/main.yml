@@ -21,25 +21,17 @@ jobs:
       - name: Teste e Empacotamento
         run: mvn clean package
 
-      - name: Verificar Relatório de Cobertura
-        run: ls -R target
-
       - name: SonarQube
         uses: sonarsource/sonarqube-scan-action@master
-#        with:
-#          args: >
-#            -Dsonar.projectKey=ReinaldoSolano_brewery
-#            -Dsonar.organization=reinaldosolano
-#            -Dsonar.sources=src/main
-#            -Dsonar.tests=src/test
-#            -Dsonar.java.binaries=target/classes
-#            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-#            -Dsonar.qualitygate.wait=true
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          SONAR_HOST_URL: https://sonarcloud.io
-#
-
+        with:
+          args: >
+            -Dsonar.projectKey=ReinaldoSolano_brewery
+            -Dsonar.organization=reinaldosolano
+            -Dsonar.sources=src/main
+            -Dsonar.tests=src/test
+            -Dsonar.java.binaries=target/classes
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco-report/jacoco.xml
+            -Dsonar.qualitygate.wait=true
           
       - name: Log Docker
         uses: docker/login-action@v3
