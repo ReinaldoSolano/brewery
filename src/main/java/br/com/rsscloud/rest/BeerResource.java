@@ -2,6 +2,8 @@ package br.com.rsscloud.rest;
 
 import br.com.rsscloud.model.Beer;
 import br.com.rsscloud.repository.BeerRepository;
+import br.com.rsscloud.rest.dto.BeerRequest;
+import br.com.rsscloud.service.BeerService;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -16,6 +18,9 @@ import java.util.List;
 public class BeerResource {
     @Inject
     BeerRepository beerRepository;
+
+    @Inject
+    BeerService beerService;
     @GET
     public List<Beer> listAll(){
         return Beer.listAll();
@@ -29,11 +34,8 @@ public class BeerResource {
 
     @POST
     @Transactional
-    public Response create(Beer beer){
-        if(beer.id != null){
-            throw new WebApplicationException("identifier must be null when creating a beer", Response.Status.BAD_REQUEST);
-        }
-        beer.persist();
+    public Response create(BeerRequest request){
+        beerService.create(request);
         return Response.status(Response.Status.CREATED).build();
     }
 

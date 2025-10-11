@@ -11,4 +11,12 @@ public class BeerRepository implements PanacheRepository<Beer> {
     public List<Beer> findByType(String type) {
         return find("type", type).list();
     }
+
+    public List<Beer> findBySku(String sku) {
+        return find("sku", sku).list();
+    }
+
+    public List<Beer> findByName(String name) {
+        return find("name", name).list();
+    }
 }
