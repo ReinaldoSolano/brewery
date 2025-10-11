@@ -21,8 +21,11 @@ jobs:
       - name: Teste e Empacotamento
         run: mvn clean package
 
-#      - name: SonarQube
-#        uses: sonarsource/sonarqube-scan-action@master
+      - name: Verificar Relatório de Cobertura
+        run: ls -R target
+
+      - name: SonarQube
+        uses: sonarsource/sonarqube-scan-action@master
 #        with:
 #          args: >
 #            -Dsonar.projectKey=ReinaldoSolano_brewery
