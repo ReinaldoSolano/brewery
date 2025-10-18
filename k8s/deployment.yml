@@ -21,7 +21,7 @@ spec:
   selector:
     app.kubernetes.io/name: brewery
     app.kubernetes.io/version: 1.0.0
-  type: LoadBalancer
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,10 +59,10 @@ spec:
           resources:
             requests:
               memory: "128Mi"
-              cpu: "200m"
+              cpu: "250m"
             limits:
               memory: "256Mi"
-              cpu: "300m"
+              cpu: "500m"
           imagePullPolicy: Always
           name: brewery
           ports:
