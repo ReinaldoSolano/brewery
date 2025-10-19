@@ -6,12 +6,15 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: brewery
-            port:
-              number: 8080
+    - host: brewery.rsscloud.com.br
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: brewery
+                port:
+                  number: 8080
+  ingressClassName: nginx
+
