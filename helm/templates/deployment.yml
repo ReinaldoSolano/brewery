@@ -32,11 +32,11 @@ spec:
         - image: {{ .Values.image }}
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "250m"
+              memory: {{ .Values.requests.memory }}
+              cpu: {{ .Values.requests.cpu }}
             limits:
-              memory: "256Mi"
-              cpu: "500m"
+              memory: {{ .Values.limits.memory }}
+              cpu: {{ .Values.limits.cpu }}
           imagePullPolicy: Always
           name: brewery
           ports:
