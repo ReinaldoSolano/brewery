@@ -89,19 +89,10 @@ jobs:
           echo "${{ secrets.COSIGN_PUBLIC_KEY }}" > cosign.pub
           cosign verify --key cosign.pub rssystem/brewery:v${{ github.run_number }}
 
-      - name: setup helm
-        uses: azure/setup-helm@v4
-      
-      - name: validate secrets
+      - name: set image tag
         run: |
-          if ! kubectl get secret postgres-credentials; then
-            echo "Secret postgres-credentials does not exist. Please create it before deploying the application."
-            exit 1
-          fi
+          sed -i "s|image: rssystem/brewery:latest|image: rssystem/brewery:v${{ github.run_number }}|g" k8s/deployment.yml
 
-      - name: deploy helm
+      - name: deploy
         run: |
-          helm upgrade --install brewery helm/ \
-            --set image=rssystem/brewery:v${{ github.run_number }} \
-            --wait \
-            --atomic
+          kubectl apply -f k8s/deployment.yml
