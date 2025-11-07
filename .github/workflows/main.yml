@@ -107,4 +107,5 @@ jobs:
           helm upgrade --install brewery helm/ \
             --set image=rssystem/brewery:v${{ github.run_number }} \
             --wait \
-            --atomic
+            --atomic \
+            --force
