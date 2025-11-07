@@ -81,12 +81,6 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
 
-      - name: install kubectl
-        uses: azure/setup-kubectl@v4
-
-      - name: check kubectl config
-        run: kubectl config current-context
-
       - name: install cosign
         uses: sigstore/cosign-installer@v3.10.0
 
@@ -95,9 +89,9 @@ jobs:
           echo "${{ secrets.COSIGN_PUBLIC_KEY }}" > cosign.pub
           cosign verify --key cosign.pub rssystem/brewery:v${{ github.run_number }}
 
-      - name: update image tag
-        run: sed -i 's|rssystem/brewery:latest|rssystem/brewery:v${{ github.run_number }}|' k8s/deployment.yml
-
+      - name: setup helm
+        uses: azure/setup-helm@v4
+      
       - name: validate secrets
         run: |
           if ! kubectl get secret postgres-credentials; then
@@ -105,7 +99,9 @@ jobs:
             exit 1
           fi
 
-      - name: deploy k8s
+      - name: deploy helm
         run: |
-          kubectl apply -f k8s/deployment.yml
-          kubectl apply -f k8s/ingress.yml
+          helm upgrade --install brewery helm/ \
+            --set image=rssystem/brewery:v${{ github.run_number }} \
+            --wait \
+            --atomic

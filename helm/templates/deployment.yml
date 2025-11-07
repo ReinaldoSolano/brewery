@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.quarkus.io/quarkus-version: 3.28.2
+    app.quarkus.io/commit-id: ace08c61e4c8411de9667929bcbb7567b2e9919f
+    app.quarkus.io/vcs-uri: https://github.com/ReinaldoSolano/brewery.git
+    app.quarkus.io/build-timestamp: 2025-10-06 - 22:10:46 +0000
+  labels:
+    app.kubernetes.io/name: brewery
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: quarkus
+  name: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: brewery
+      app.kubernetes.io/version: 1.0.0
+  template:
+    metadata:
+      annotations:
+        app.quarkus.io/quarkus-version: 3.28.2
+        app.quarkus.io/commit-id: ace08c61e4c8411de9667929bcbb7567b2e9919f
+        app.quarkus.io/vcs-uri: https://github.com/ReinaldoSolano/brewery.git
+      labels:
+        app.kubernetes.io/managed-by: quarkus
+        app.kubernetes.io/name: brewery
+        app.kubernetes.io/version: 1.0.0
+    spec:
+      containers:
+        - image: {{ .Values.image }}
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          imagePullPolicy: Always
+          name: brewery
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          env:
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: db-jdbc
+            - name: QUARKUS_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: db-username
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: db-password
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          startupProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /q/health/started
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10

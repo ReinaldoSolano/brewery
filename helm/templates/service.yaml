@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.quarkus.io/quarkus-version: 3.28.2
+    app.quarkus.io/commit-id: ace08c61e4c8411de9667929bcbb7567b2e9919f
+    app.quarkus.io/vcs-uri: https://github.com/ReinaldoSolano/brewery.git
+    app.quarkus.io/build-timestamp: 2025-10-06 - 22:10:46 +0000
+  labels:
+    app.kubernetes.io/name: brewery
+    app.kubernetes.io/version: 1.0.0
+    app.kubernetes.io/managed-by: quarkus
+    app: brewery
+  name: brewery
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app.kubernetes.io/name: brewery
+    app.kubernetes.io/version: 1.0.0
+  type: ClusterIP

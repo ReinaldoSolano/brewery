@@ -5,6 +5,7 @@ import br.com.rsscloud.repository.BeerRepository;
 import br.com.rsscloud.rest.dto.BeerRequest;
 import br.com.rsscloud.service.BeerService;
 import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -23,7 +24,8 @@ public class BeerResource {
     @Inject
     BeerService beerService;
     @GET
-    @Counted(description = "contador busca cervejas")
+    @Counted(value = "call_beers_total", description = "contador busca cervejas")
+    @Timed(value = "duration_beers_endpoint", description = "duração da chamda")
     public List<Beer> listAll(){
         return Beer.listAll();
     }
