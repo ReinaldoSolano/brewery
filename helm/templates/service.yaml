@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/name: brewery
     app.kubernetes.io/version: 1.0.0
     app.kubernetes.io/managed-by: quarkus
-    app: brewery
+    app: {{ .Values.name  }}
   name: brewery
 spec:
   ports:
