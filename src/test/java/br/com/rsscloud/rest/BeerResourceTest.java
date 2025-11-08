@@ -85,8 +85,8 @@ class BeerResourceTest {
         given()
                 .when().get("/beers/{id}", 99999L)
                 .then()
-                .statusCode(204)
-                .body(equalTo(""));
+                .statusCode(404) // Alterado de 204 para 404, pois é o código correto para recurso não encontrado
+                .body(equalTo("")); // Mantido body vazio
     }
 
     @Test
@@ -96,19 +96,21 @@ class BeerResourceTest {
         request.type = "Wheat";
 
         // Cria cerveja
-        given()
+        var response = given()
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/beers")
-                .then().statusCode(Response.Status.CREATED.getStatusCode());
+                .then().statusCode(Response.Status.CREATED.getStatusCode())
+                .extract().response();
 
-        // Busca o id
-        Long id = given()
-                .when().get("/beers")
-                .then().extract().jsonPath().getLong("[0].id");
+        // Extrai a cerveja criada para ter todos os campos necessários
+        Beer createdBeer = response.as(Beer.class);
+        Long id = createdBeer.id;
 
-        // Atualiza
+        // Atualiza mantendo os campos obrigatórios
         Beer updated = new Beer();
+        updated.id = id; // Importante para a validação de ID
+        updated.sku = createdBeer.sku; // Mantém o SKU existente
         updated.name = "Witbier Updated";
         updated.description = "Citrus Updated";
         updated.type = "Wheat Updated";
@@ -124,6 +126,7 @@ class BeerResourceTest {
                 .body("type", equalTo("Wheat Updated"));
 
         // Atualiza inexistente
+        updated.id = 55555L; // Atualiza o ID para um inexistente
         given()
                 .contentType(ContentType.JSON)
                 .body(updated)

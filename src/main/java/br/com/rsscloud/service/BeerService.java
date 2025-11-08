@@ -21,7 +21,7 @@ public class BeerService {
 
 
     @Transactional
-    public void create(BeerRequest request) {
+    public Beer create(BeerRequest request) {
 
         validName(request.name);
         Beer beer = new Beer();
@@ -30,6 +30,7 @@ public class BeerService {
         beer.sku = generateSKU();
         beer.description = "Lipi's ".concat(request.name.trim()).concat(" beer");
         beer.persist();
+        return beer;
 
 
     }
