@@ -11,6 +11,7 @@ metadata:
     app.kubernetes.io/version: 1.0.0
     app.kubernetes.io/managed-by: quarkus
   name: {{ .Values.name }}
+  namespace: brewery
 spec:
   replicas: 1
   selector:

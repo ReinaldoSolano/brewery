@@ -12,6 +12,7 @@ metadata:
     app.kubernetes.io/managed-by: quarkus
     app: {{ .Values.name  }}
   name: brewery
+  namespace: brewery
 spec:
   ports:
     - name: http
