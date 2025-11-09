@@ -99,9 +99,6 @@ jobs:
             exit 1
           fi
 
-      - name: delete existing service
-        run: kubectl delete service brewery --ignore-not-found
-
       - name: deploy helm
         run: |
           helm upgrade --install brewery helm/ \
