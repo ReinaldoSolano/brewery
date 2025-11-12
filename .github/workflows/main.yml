@@ -106,4 +106,5 @@ jobs:
             --set image=rssystem/brewery:v${{ github.run_number }} \
             --wait \
             --atomic \
-            --force
+            --force \
+            --timeout 10m

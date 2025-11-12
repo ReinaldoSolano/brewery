@@ -61,32 +61,32 @@ spec:
                   name: postgres-credentials
                   key: db-password
           livenessProbe:
-            failureThreshold: 3
+            failureThreshold: 10
             httpGet:
               path: /q/health/live
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 5
+            initialDelaySeconds: 30
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
           readinessProbe:
-            failureThreshold: 3
+            failureThreshold: 10
             httpGet:
               path: /q/health/ready
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 5
+            initialDelaySeconds: 30
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
           startupProbe:
-            failureThreshold: 3
+            failureThreshold: 10
             httpGet:
               path: /q/health/started
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 5
+            initialDelaySeconds: 30
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
