@@ -101,7 +101,7 @@ jobs:
 
       - name: deploy helm
         run: |
-          helm upgrade --install brewery helm/ \
+          helm upgrade brewery helm/ \
             --namespace brewery \
             --set image=rssystem/brewery:v${{ github.run_number }} \
             --wait \
