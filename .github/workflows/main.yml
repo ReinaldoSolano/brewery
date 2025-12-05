@@ -94,8 +94,10 @@ jobs:
       
       - name: validate secrets
         run: |
-          if ! kubectl get secret postgres-credentials; then
-            echo "Secret postgres-credentials does not exist. Please create it before deploying the application."
+          if kubectl get secret postgres-credentials >/dev/null 2>&1; then
+            echo "Secret postgres-credentials existe, prosseguindo com o deploy..."
+          else
+            echo "Secret postgres-credentials não encontrado. Crie-o antes de fazer o deploy."
             exit 1
           fi
 
@@ -104,7 +106,8 @@ jobs:
           helm upgrade --install brewery ./helm/ \
             --namespace brewery \
             --set image=rssystem/brewery:v${{ github.run_number }} \
+            --set env.QUARKUS_PROFILE=prod \
             --wait \
-            --atomic \
-            --force \
+            --rollback-on-failure \
+            --force-replace \
             --timeout 10m
