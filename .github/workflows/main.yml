@@ -109,5 +109,6 @@ jobs:
             --set env.QUARKUS_PROFILE=prod \
             --wait \
             --rollback-on-failure \
-            --force-replace \
             --timeout 10m
+
+          kubectl rollout status deployment/brewery -n brewery --timeout=5m
